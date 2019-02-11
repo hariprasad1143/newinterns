@@ -14,11 +14,11 @@
         <!-- Header Part  -->
         <div class="page-header">
           #if(${order.transactionStatus} == "TRANSACTION_SUCCESS")
-          <h1 style="font-weight: 200; color: #202020;">Pembayaran Pulsa Berhasil!</h1>
+          <h1 style="font-weight: 200; color: #202020;">Pembayaran Pulsa Berhasil! Rishabh</h1>
           #elseif(${order.transactionStatus} == "TRANSACTION_PENDING")
           <h1 style="font-weight: 200; color: #202020;">Transaksi Sedang Diproses!</h1>
           #elseif(${order.transactionStatus} == "TRANSACTION_FAILED")
-          <h1 style="font-weight: 200; color: #202020;">Transaksi Gagal!</h1>
+          <h1 style="font-weight: 200; color: #202020;">Transaksi Gagal! Rishabh</h1>
           #elseif(!${order.transactionStatus})
           <h1 style="font-weight: 200; color: #202020;">Konfirmasi Pembelian!</h1>
           #end

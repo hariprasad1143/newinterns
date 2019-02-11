@@ -20,7 +20,7 @@
           #elseif(${order.transactionStatus} == "TRANSACTION_FAILED")
           <h1 style="font-weight: 200; color: #202020;">Transaksi Gagal!</h1>
           #elseif(!${order.transactionStatus})
-          <h1 style="font-weight: 200; color: #202020;">Konfirmasi Pembelian!</h1>
+          <h1 style="font-weight: 200; color: #202020;">Konfirmasi Pembelian! Rishabh</h1>
           #end
         </div>
         <div style="color:#656565; margin-bottom: 20px;">
@@ -35,7 +35,7 @@
           </div>
           <div>
            Welcome to blibli
-          </div>
+       </div>
           #elseif(${order.transactionStatus} == "TRANSACTION_FAILED")
           <p>Transaksi Anda telah dibatalkan karena "$!{order.transactionStatusNote}"</p>
           #elseif(!${order.transactionStatus})

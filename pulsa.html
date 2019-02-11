@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title></title>
+  </head>
+  <body>
+    <div id="main-outer-div" style="margin-bottom: 10px; background-color: #ffffff;">
+      <div id="secondary-outer-div">
+        <div class="blibli-img-container" style="">
+            <img src="https://www.static-src.com/resources/images/logo-blibli.png" alt="">
+        </div>
+
+        <!-- Header Part  -->
+        <div class="page-header">
+          #if(${order.transactionStatus} == "TRANSACTION_SUCCESS")
+          <h1 style="font-weight: 200; color: #202020;">Pembayaran Pulsa Berhasil!</h1>
+          #elseif(${order.transactionStatus} == "TRANSACTION_PENDING")
+          <h1 style="font-weight: 200; color: #202020;">Transaksi Sedang Diproses!</h1>
+          #elseif(${order.transactionStatus} == "TRANSACTION_FAILED")
+          <h1 style="font-weight: 200; color: #202020;">Transaksi Gagal!</h1>
+          #elseif(!${order.transactionStatus})
+          <h1 style="font-weight: 200; color: #202020;">Konfirmasi Pembelian!</h1>
+          #end
+        </div>
+        <div style="color:#656565; margin-bottom: 20px;">
+          <p>Hi ${order.fullName},</p>
+        </div>
+        <div style="color:#656565; margin-bottom:30px;">
+          #if(${order.transactionStatus} == "TRANSACTION_SUCCESS")
+          <p> Terima kasih telah melakukan pembayaran $!{order.productType} melalui Blibli.com.</p>
+          #elseif(${order.transactionStatus} == "TRANSACTION_PENDING")
+          <div style="margin-bottom: 15px;">
+            Pembayaran Anda telah kami terima, saat ini kami sedang memproses pembelian pulsa Anda. Proses ini membutuhkan waktu paling lambat 1x24 jam.
+          </div>
+          <div>
+            Konfirmasi selanjutnya akan dikirimkan melalui email. Jika status pembayaran tidak berhasil, pembayaran yang telah Anda lakukan akan dikembalikan.
+          </div>
+          #elseif(${order.transactionStatus} == "TRANSACTION_FAILED")
+          <p>Transaksi Anda telah dibatalkan karena "$!{order.transactionStatusNote}"</p>
+          #elseif(!${order.transactionStatus})
+          <p>Silakan melakukan pembayaran untuk menghindari pembatalan transaksi secara otomatis.</p>
+          #end
+        </div>
+
+        <!-- Info Box  -->
+        <div style="background-color: #f2f2f2;padding: 20px; margin-bottom: 30px;">
+         #if(!${order.transactionStatus})
+          <table>
+            #if(${order.total} && ${order.total} != "")
+            <tr style="height: 40px;">
+              <td style="width: 20%; color: #202020;">Tagihan</td>
+              <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px;">Rp $!{order.total}</span></td>
+            </tr>
+            #end
+            #if(${order.paymentMethod} && ${order.paymentMethod} != "")
+            <tr style="height: 40px;">
+              <td style="width: 20%; color: #202020;">Metode</td>
+              <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px;">$!{order.paymentMethod}</span></td>
+            </tr>
+            #end
+            #if(${order.paymentMethod} == "KlikBCA" || ${order.paymentMethod} == "VirtualAccountMandiri" || ${order.paymentMethod} == "VirtualAccountBCA" || ${order.paymentMethod} == "VirtualAccountBcaOnline" || ${order.paymentMethod} == "AtmBersama" || ${order.paymentMethod} == "XLTunai" || ${order.paymentMethod} == "MandiriBillPayment")
+            <tr style="height: 40px;" >
+              #if(${order.paymentMethod} == "KlikBCA")
+                #if(${order.klikBcaUserId} && ${order.klikBcaUserId} != "")
+                <td style="width: 20%; color: #202020;">User ID</td>
+                <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px;">$!{order.klikBcaUserId}</span></td>
+                #end
+              #elseif(${order.paymentMethod} == "VirtualAccountMandiri" || ${order.paymentMethod} == "VirtualAccountBCA" || ${order.paymentMethod} == "VirtualAccountBcaOnline" || ${order.paymentMethod} == "AtmBersama")
+                #if(${order.vaNumber} && ${order.vaNumber} != "")
+                <td style="width: 20%; color: #202020;">Rekening</td>
+                <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px;">$!{order.vaNumber}</span></td>
+                #end
+              #elseif(${order.paymentMethod} == "XLTunai")
+                #if(${order.orderId} && ${order.orderId} != "")
+                <td style="width: 20%; color: #202020;">No Pesanan</td>
+                <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px;">$!{order.orderId}</span></td>
+                #end
+              #elseif(${order.paymentMethod} == "MandiriBillPayment")
+                #if(${order.billKey} && ${order.billKey} != "")
+                <td style="width: 20%; color: #202020;">Rekening</td>
+                <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px;">$!{order.billKey}</span></td>
+                #end
+              #end
+            </tr>
+            #end
+            <tr style="height: 40px;">
+              #if(${order.expiredDate} && ${order.expiredDate} != "")
+              <td style="width: 20%; color: #202020;">Batas Waktu</td>
+              <td style="width: 80%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;"><span style="margin-left: 40px;">:</span> <span style="margin-left: 20px; color: #f7931e">$!{dateTool.format('dd MMM yyyy', $!{order.expiredDate})}, Pukul $!{dateTool.format('HH:mm', $!{order.expiredDate})} WIB</span></td>
+              #end
+            </tr>
+          </table>
+          #if(${order.paymentMethod} == "KlikBCA")
+            <div style="margin-top: 30px; margin-bottom: 25px;">
+                Untuk pembayaran dapat klik
+            </div>
+            <div style="margin-bottom: 20px;">
+              <a href="https://ibank.klikbca.com/" style="text-decoration:none; color: #fff; border-radius: 5px; background-color: #f7931e; padding: 15px 80px;" target="_blank">
+                Bayar Sekarang
+              </a>
+            </div>
+          #end
+          #elseif(${order.transactionStatus} == "TRANSACTION_SUCCESS")
+          <div style="color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;">$!{order.productType} $!{order.networkOperator} Rp $!{order.pulsaNominal}</div>
+          <div>akan segera ditambahkan ke nomor</div>
+          <div style="color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500;">$!{order.msisdn}</div>
+          #end
+          <div class="">
+            <p style="display: inline-block; color:#656565;">Status pesanan dapat dilihat di </p> <a href="https://www.blibli.com/member/order" target="_blank">Pesanan Saya</a>
+          </div>
+
+        </div>
+
+        <!-- Table Info -->
+        <div style="margin-bottom: 30px;">
+          <div style="display: block; margin-bottom: 20px;">
+            #if(${order.orderId} && ${order.orderId} != "")
+            <div style="display: inline-block; width: 50%; vertical-align: top;">
+              <div style="font-family: HelveticaNeue-Medium; font-weight: 500; margin-bottom: 10px; color: #202020">
+                No. Pesanan
+              </div>
+              <div style="color: #999999; margin-bottom: 10px;">
+                $!{order.orderId}
+              </div>
+            </div>
+            #end
+            #if(${order.timePlace} && ${order.timePlace} != "")
+            <div style="display: inline-block; vertical-align: top;">
+              <div style="font-family: HelveticaNeue-Medium; font-weight: 500; margin-bottom: 10px; color: #202020">
+                Tanggal Transaksi
+              </div>
+              <div style="color: #999999; margin-bottom: 10px;">
+                 $!{order.timePlace}
+              </div>
+            </div>
+            #end
+          </div>
+          <div class="second-row" style="display: block;">
+            #if(${order.paymentMethod} && ${order.paymentMethod} != "")
+            <div style="display: inline-block; width: 50%; vertical-align: top;">
+              <div style="font-family: HelveticaNeue-Medium; font-weight: 500; margin-bottom: 10px; color: #202020">
+                Metode Pembayaran
+              </div>
+              <div style="color: #999999; margin-bottom: 10px;">
+                $!{order.paymentMethod}
+              </div>
+            </div>
+            #end
+            #if(${order.paymentStatus} && ${order.paymentStatus} != "")
+            <div style="display: inline-block; vertical-align: top;">
+              <div style="font-family: HelveticaNeue-Medium; font-weight: 500; margin-bottom: 10px; color: #202020">
+                Status Pembayaran
+              </div>
+              <div style="color: #999999; margin-bottom: 10px;">
+                $!{order.paymentStatus}
+              </div>
+            </div>
+            #end
+          </div>
+        </div>
+        <div style="margin-bottom: 30px; color: #999999;">
+          <div class="order-summary-title" style="font-family: HelveticaNeue-Medium; font-weight: 500; font-size: 17px; border-bottom: 2px solid #eee; margin-bottom: 10px; padding-bottom: 10px; color: #202020;">
+              Ringkasan Pemesanan
+          </div>
+          <table style="width: 100%;" cellspacing="0">
+          <tr style="height: 40px;">
+              <td class="product-info" style="width: 50%;">
+                <div class="product-title bold black-font" style="color: #202020; margin-bottom: 15px; font-family: HelveticaNeue-Medium; font-weight: 500;">
+                  #if(${order.productType} == "Pulsa")
+                  $!{order.productType} $!{order.networkOperator} Rp $!{order.pulsaNominal}
+                  #end
+                </div>
+                <div class="product-desc">
+                  #if(${order.productType} == "Pulsa")
+                    <div> Nomor tujuan <b>$!{order.msisdn}</b> </div>
+                    <div> $!{order.description} </div>
+                  #end
+                </div>
+              </td>
+              <td class="empty" style="width: 35%;">
+              </td>
+              <td class="rp" style="width: 10%;">
+                #if(${order.productType} == "Pulsa")
+                  Rp
+                #end
+              </td>
+              <td class="price" style="width: 15%; text-align: right;">
+                  $!{order.pulsaNominal}
+              </td>
+          </tr>
+          <tr class="each-row" style="padding: 15px 0px; border-bottom: 2px solid #eee; height: 40px;">
+              <td class="product-info" style="width: 50%; border-top: 2px solid #eee; border-bottom: 2px solid #eee; border-top: 2px solid #eee;">
+              </td>
+              <td class="empty" style="width: 35%; border-top: 2px solid #eee; border-bottom: 2px solid #eee; border-top: 2px solid #eee;">
+                  Subtotal
+              </td>
+              <td class="rp" style="width: 10%; border-top: 2px solid #eee; border-bottom: 2px solid #eee; border-top: 2px solid #eee;">
+                  Rp
+              </td>
+              <td class="price" style="width: 15%; border-top: 2px solid #eee; text-align: right; margin-right: 15px; border-bottom: 2px solid #eee; border-top: 2px solid #eee;">
+                $!{order.amount}
+              </td>
+          </tr>
+          <tr class="each-row" style="padding: 15px 0px; border-bottom: 2px solid #eee; height: 40px;">
+              <td class="product-info" style="width: 50%; border-bottom: 2px solid #eee;">
+              </td>
+              <td class="empty" style="width: 35%; border-bottom: 2px solid #eee;">
+                  Voucher & Promo lainnya
+              </td>
+              <td class="rp" style="width: 10%; border-bottom: 2px solid #eee;">
+                  Rp
+              </td>
+              <td class="price" style="width: 15%; text-align: right; margin-right: 15px; border-bottom: 2px solid #eee;">
+                  $!{order.potonganHarga}
+              </td>
+          </tr>
+          <tr class="each-row border-black" style="padding: 15px 0px; border-bottom: 2px solid #000 !important; height: 40px;">
+              <td class="product-info" style="width: 50%; border-bottom: 2px solid #202020;">
+              </td>
+              <td class="empty black-font bold-font" style="width: 35%; color: #202020; font-family: HelveticaNeue-Medium; font-weight: 500; border-bottom: 2px solid #202020;">
+                  Total Pembayaran
+              </td>
+              <td class="rp orange-font" style="width: 10%; color: #f7931e; border-bottom: 2px solid #202020;">
+                  Rp
+              </td>
+              <td class="price orange-font" style="width: 15%; color: #f7931e; text-align:right; border-bottom: 2px solid #202020;">
+                  $!{order.total}
+              </td>
+          </tr>
+          </table>
+        </div>
+        <div class="warm-greetings" style="margin-bottom: 15px;">
+          Salam Hangat
+        </div>
+        <div class=" Blibli-sign">
+          Blibli.com
+        </div>
+      </div>
+    </div>
+    <div id="bottom-grey-outer-div" class="bottom-page-div" style="padding: 10px 20px; background-color: #ddd; margin-bottom: 40px;">
+      <div class="customer-care-block" style="border-bottom: 2px solid #ccc; padding-bottom: 10px;">
+        <p>Jikalau ada keluhan atau pertanyaan silahkan menghubungi Customer Service 24 jam kami di
+        <span class="bold-font black-font" style="font-family: HelveticaNeue-Medium; font-weight: 500; color: #202020;">0804 1 871 871</span> atau email ke : <a href="mailto:customer.care@blibli.com">customer.care@blibli.com</a></p>
+      </div>
+      <div class="do-not-reply-block" style="border-bottom: 2px solid #ccc; padding: 10px 0px; margin-bottom: 30px;">
+        <p>Email ini dibuat secara otomatis. Mohon tidak mengirimkan balasan ke email ini.</p>
+      </div>
+      <table style="width: 100%; margin-bottom: 30px;" cellspacing="0">
+        <tr class="cicilan-gratis-customc-icon-div" style="margin-bottom: 30px;">
+            <td class="cicilan" style="width: 33%; vertical-align: top;">
+              <img src="https://www.static-src.com/resources/images/mailassets/icon-usp-1.png" style="vertical-align: middle;" alt="">
+              <span id="cicilan0" style="font-size: 15px; color: #202020; margin-left: 5px;">Cicilan 0%</span>
+            </td>
+            <td class="gratis" style="width: 33%; vertical-align: top;">
+              <img src="https://www.static-src.com/resources/images/mailassets/icon-usp-2.png" style="vertical-align: middle;" alt="">
+              <span id="gratisPengiriman" style="font-size: 15px; color: #202020; margin-left: 5px;">Gratis Pengiriman</span>
+            </td>
+            <td class="customer-care" style="width: 33%; vertical-align: top;">
+              <img src="https://www.static-src.com/resources/images/mailassets/icon-usp-3.png" style="vertical-align: middle;" alt="">
+              <span id="customerCareSpan" style="font-size: 15px; color: #202020; margin-left: 5px;">24/7 Customer Care</span>
+            </td>
+        </tr>
+      </table>
+      <table style="width: 100%;" cellspacing="0">
+          <tr class="download-android-apple" style="margin-bottom: 20px;">
+            <td class="app-stores-block" style="width: 60%; margin-right: 20px; vertical-align: top;">
+                <div class="download-title" style="margin-bottom: 15px;">
+                  Download gratis aplikasi Blibli
+                </div>
+                <div class="links-to-store" style"display: block;">
+                  <div class="apple" style="display:inline-block;">
+                    <a href="https://itunes.apple.com/id/app/blibli.com/id1034231507?l=id&mt=8" target="_blank"><img id="appleStore" src="https://www.static-src.com/resources/images/assets/ic_app_store.jpg" style="width: 120px; height: 40px;" alt=""/></a>
+                  </div>
+                  <div class="android" style="display: inline-block;">
+                    <a href="https://play.google.com/store/apps/details?id=blibli.mobile.commerce" target="_blank"><img id="androidStore" src="https://www.static-src.com/resources/images/assets/ic_google_play.png" style="width: 120px; height: 40px;" alt=""/></a>
+                  </div>
+                </div>
+            </td>
+          <td id="socialLinksBlock" class="social-links-block" style="width: 40%; vertical-align: top;">
+            <div class="social-link-title" style="margin-bottom: 15px;">
+                ikuti Kami
+            </div>
+            <div class="social-links">
+              <a href="https://www.facebook.com/bliblidotcom"><img src="https://www.static-src.com/siva/asset/10_2017/facebook-rounded-icon.png" style="width: 40px;vertical-align: top;margin-bottom: 10px;" alt=""></a>
+              <a href="https://plus.google.com/+BliblidotcomOfficial"><img src="https://www.static-src.com/siva/asset/10_2017/gplus-rounded-icon.png" style="width: 40px;vertical-align: top;margin-bottom: 10px;" alt=""></a>
+              <a href="https://twitter.com/bliblidotcom"><img src="https://www.static-src.com/siva/asset/10_2017/twitter-rounded-icon.png" style="width: 40px;vertical-align: top;margin-bottom: 10px;" alt=""></a>
+              <a href="https://www.youtube.com/user/bliblidotcom"><img src="https://www.static-src.com/siva/asset/10_2017/youtube-rounded-icon.png" style="width: 40px;vertical-align: top;margin-bottom: 10px;" alt=""></a>
+              <a href="https://www.instagram.com/bliblidotcom/"><img src="https://www.static-src.com/siva/asset//10_2017/instagram-rounded-icon.png" style="width: 40px;vertical-align: top;margin-bottom: 10px;" alt=""></a>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <table style="width: 100%;">
+      <tr>
+        <td style="width: 50%;">
+          <span>Copyright © 2011-2017 Blibli.com. All Rights Reserved.</span>
+        </td>
+        <td style="width: 50%; text-align: right;">
+          <a href="https://www.blibli.com/member/order" style="border-right: 3px solid #ccc; padding-right: 5px;" target="_blank">Pesanan Saya</a>
+          <a href="https://www.blibli.com/panduan-belanja#hash-side-pembayaran" style="border-right: 3px solid #ccc; padding-right: 5px;" target="_blank">Panduan Pembayaran</a>
+          <a href="https://www.blibli.com/pages/self-service" target="_blank">Hubungi Kami</a>
+        </td>
+      </tr>
+    </table>
+    <style>
+    @import url();
+      body{
+        background-color: #f2f2f2;
+        font-family: Helvetica;
+        color: #999999;
+      }
+      .bold-font{
+        font-family: HelveticaNeue-Medium; font-weight: 500;
+      }
+      .black-font{
+        color: #202020;
+      }
+      .orange-font{
+        color: #f7931e;
+      }
+      .bold{
+        font-family: HelveticaNeue-Medium; font-weight: 500;
+      }
+      a{
+        color: #0096d9;
+      }
+      /*@media only screen and (max-width: 640px) {
+        #main-outer-div{
+          margin-top: 0px !important;
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+        }
+        #secondary-outer-div{
+          padding: 0px !important;
+        }
+        #outer-print-button-div{
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+          margin-top: 20px !important;
+          padding: 0px !important;
+        }
+        #secondary-print-button-div{
+          padding-left: 10px !important;
+          padding-right: 10px !important;
+        }
+        #bottom-grey-outer-div{
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+          padding: 10px 20px !important;
+        }
+        #cicilan0{
+          margin-left: 0px !important;
+        }
+        #gratisPengiriman{
+          margin-left: 0px !important;
+        }
+        #customerCareSpan{
+          margin-left: 0px !important;
+        }
+        #appleStore{
+          width: 120px !important;
+        }
+        #socialLinksBlock{
+          vertical-align: top !important;
+        }
+      }
+      @media only screen and (max-width: 1024px) {
+        #main-outer-div{
+          margin-top: 0px !important;
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+        }
+        #secondary-outer-div{
+          padding: 0px !important;
+        }
+        #outer-print-button-div{
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+          margin-top: 20px !important;
+          padding: 0px !important;
+        }
+        #secondary-print-button-div{
+          padding-left: 10px !important;
+          padding-right: 10px !important;
+        }
+        #bottom-grey-outer-div{
+          margin-left: 0px !important;
+          margin-right: 0px !important;
+          padding: 10px 20px !important;
+        }
+        #cicilan0{
+          margin-left: 0px !important;
+        }
+        #gratisPengiriman{
+          margin-left: 0px !important;
+        }
+        #customerCareSpan{
+          margin-left: 0px !important;
+        }
+        #appleStore{
+          width: 120px !important;
+        }
+        #socialLinksBlock{
+          vertical-align: top !important;
+        }
+      }*/
+    </style>
+  </body>
+</html>
